@@ -163,8 +163,6 @@ namespace EndlessGame
                         continue;
                     }
 
-                    Debug.Log($"Moving Scheduled Aircraft from #{usedApronIndex} to {emptyApronIndex}.");
-
                     usedApron.takeoffTask.apron = emptyApron;
                     usedApron.takeoffTask.gameObject.transform.SetParent(emptyApron.transform);
                     usedApron.takeoffTask.gameObject.transform.DOLocalMove(Vector3.zero, 0.5f).SetUpdate(isIndependentUpdate: true);
@@ -184,12 +182,10 @@ namespace EndlessGame
             }
 
             int emptyApronCount = instance.Aprons.Count - firstEmptyApron;
-            Debug.Log($"{emptyApronCount} Count Empty Apron detected from #{firstEmptyApron}.");
             if (instance.hangingTakeoffTasks.Count > 0)
             {
                 // Step 1: Move all hanging jobs to empty aprons.
                 int scheduleableHangingTaskCount = Math.Min(emptyApronCount, instance.hangingTakeoffTasks.Count);
-                Debug.Log($"Moving {scheduleableHangingTaskCount} Count aircrafts from virtual aprons to real ones from {firstEmptyApron}.");
                 for (int i = 0; i < scheduleableHangingTaskCount; i++)
                 {
                     TakeoffTask hangingTask = instance.hangingTakeoffTasks[i];
@@ -206,7 +202,6 @@ namespace EndlessGame
                 // Step 2: Forget handled jobs.
                 instance.hangingTakeoffTasks.RemoveRange(0, scheduleableHangingTaskCount);
 
-                Debug.Log($"Moving {instance.hangingTakeoffTasks.Count} tasks to virtual aprons.");
                 // TODO: Cache this array instance.
                 Apron[] virtualAprons = new Apron[] { instance.virtualApron, instance.virtualApron2 };
                 // Step 3: Move hanging jobs.
